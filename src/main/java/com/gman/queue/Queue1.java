@@ -2,31 +2,39 @@ package com.gman.queue;
 
 import java.util.AbstractQueue;
 import java.util.Iterator;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
+ * Single producer
+ * Single consumer
+ *
+ *
  * @author ydegtyarenko
  * @since 10/30/14
  */
-public class SingleProducerSingleConsumerLazyQueue<T> extends AbstractQueue<T> {
+public class Queue1<T> extends AbstractQueue<T> {
 
 	public static final int SIZE = 2 << 20;
 
 	private final T[] data = (T[]) new Object[SIZE];
-	private AtomicInteger incomeIndex = new AtomicInteger();
-	private int outcomeIndex = 0;
+
+	private volatile int incomeIndex = 0;
+	private volatile int outcomeIndex = 0;
 
 	@Override
 	public boolean offer(T t) {
-		int currentIndex = incomeIndex.get();
-		data[currentIndex] = t;
-		incomeIndex.lazySet(calculateNextIndex(currentIndex));
-		return true;
+		int possibleNext = calculateNextIndex(incomeIndex);
+		if (possibleNext == outcomeIndex) {
+			return false;
+		} else {
+			data[incomeIndex] = t;
+			incomeIndex = possibleNext;
+			return true;
+		}
 	}
 
 	@Override
 	public T poll() {
-		if (outcomeIndex == incomeIndex.get()) {
+		if (outcomeIndex == incomeIndex) {
 			return null;
 		} else {
 			T t = data[outcomeIndex];

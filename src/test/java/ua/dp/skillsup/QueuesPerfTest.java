@@ -1,8 +1,7 @@
 package ua.dp.skillsup;
 
-
-import com.gman.queue.SingleProducerSingleConsumerLazyQueue;
-import com.gman.queue.SingleProducerSingleConsumerQueue;
+import com.gman.queue.*;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Queue;
@@ -33,14 +32,34 @@ public class QueuesPerfTest {
 	}
 
 	@Test
-	public void testSingleProducerSingleConsumerQueue() throws Exception {
-		Queue<Integer> queue = new SingleProducerSingleConsumerQueue<>();
+	public void testQueue1() throws Exception {
+		Queue<Integer> queue = new Queue1<>();
 		perfTest(queue);
 	}
 
 	@Test
-	public void testSingleProducerSingleConsumerLazyQueue() throws Exception {
-		Queue<Integer> queue = new SingleProducerSingleConsumerLazyQueue<>();
+	public void testQueue2() throws Exception {
+		Queue<Integer> queue = new Queue2<>();
+		perfTest(queue);
+	}
+
+	@Test
+	public void testQueue3() throws Exception {
+		Queue<Integer> queue = new Queue3<>();
+		perfTest(queue);
+	}
+
+	@Test
+    @Ignore("Probably has some inconsistency")
+	public void testQueue4() throws Exception {
+		Queue<Integer> queue = new Queue4<>();
+		perfTest(queue);
+	}
+
+	@Test
+    @Ignore("Probably has some inconsistency")
+	public void testQueue5() throws Exception {
+		Queue<Integer> queue = new Queue5<>();
 		perfTest(queue);
 	}
 

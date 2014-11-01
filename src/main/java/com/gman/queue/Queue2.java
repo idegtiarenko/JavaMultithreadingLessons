@@ -4,22 +4,32 @@ import java.util.AbstractQueue;
 import java.util.Iterator;
 
 /**
+ * Single producer
+ * Single consumer
+ * Elements in queue are padded to prevent false sharing
+ *
  * @author ydegtyarenko
  * @since 10/30/14
  */
-public class SingleProducerSingleConsumerQueue<T> extends AbstractQueue<T> {
+public class Queue2<T> extends AbstractQueue<T> {
 
 	public static final int SIZE = 2 << 20;
+	public static final int CONTENDED_STEP = 32;
 
 	private final T[] data = (T[]) new Object[SIZE];
 	private volatile int incomeIndex = 0;
-	private int outcomeIndex = 0;
+	private volatile int outcomeIndex = 0;
 
 	@Override
 	public boolean offer(T t) {
-		data[incomeIndex] = t;
-		incomeIndex = calculateNextIndex(incomeIndex);
-		return true;
+		int possibleNext = calculateNextIndex(incomeIndex);
+		if (possibleNext == outcomeIndex) {
+			return false;
+		} else {
+			data[incomeIndex] = t;
+			incomeIndex = possibleNext;
+			return true;
+		}
 	}
 
 	@Override
@@ -49,6 +59,6 @@ public class SingleProducerSingleConsumerQueue<T> extends AbstractQueue<T> {
 	}
 
 	private int calculateNextIndex(int currentIndex) {
-		return (currentIndex + 1) % SIZE;
+		return (currentIndex + CONTENDED_STEP) % SIZE;
 	}
 }
