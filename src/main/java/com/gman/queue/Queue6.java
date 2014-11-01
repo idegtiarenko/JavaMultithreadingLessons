@@ -16,7 +16,7 @@ import java.util.concurrent.atomic.AtomicLong;
  */
 public class Queue6<T> extends AbstractQueue<T> {
 
-	public static final int SIZE = 2 << 20;
+	public static final int SIZE = 2 << 12;
 	public static final int CONTENDED_STEP = 32;
 
 	private final T[] data = (T[]) new Object[SIZE];
@@ -66,6 +66,6 @@ public class Queue6<T> extends AbstractQueue<T> {
 	}
 
 	private int calculateIndex(long currentIndex) {
-		return (int) currentIndex % SIZE;
+		return (int)(currentIndex % SIZE);
 	}
 }

@@ -71,6 +71,6 @@ public class Queue7<T> extends AbstractQueue<T> {
 	}
 
 	private int calculateIndex(long currentIndex) {
-		return (int) currentIndex % SIZE;
+		return (int)(currentIndex % SIZE);
 	}
 }
