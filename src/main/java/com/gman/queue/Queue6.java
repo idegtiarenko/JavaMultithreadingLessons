@@ -21,12 +21,8 @@ public class Queue6<T> extends AbstractQueue<T> {
 
 	private final T[] data = (T[]) new Object[SIZE];
 
-	private final AtomicLong incomeIndex = new AtomicLong() {
-		public final long[] padding = new long[32];
-	};
-	private final AtomicLong outcomeIndex = new AtomicLong() {
-		public final long[] padding = new long[32];
-	};
+	private final AtomicLong incomeIndex = new AtomicLongWithPadding();
+	private final AtomicLong outcomeIndex = new AtomicLongWithPadding();
 
 	@Override
 	public boolean offer(T t) {
@@ -68,4 +64,8 @@ public class Queue6<T> extends AbstractQueue<T> {
 	private int calculateIndex(long currentIndex) {
 		return (int)(currentIndex % SIZE);
 	}
+
+    private static final class AtomicLongWithPadding extends AtomicLong {
+        public final long[] padding = new long[32];
+    }
 }
