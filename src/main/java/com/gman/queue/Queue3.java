@@ -2,13 +2,11 @@ package com.gman.queue;
 
 import java.util.AbstractQueue;
 import java.util.Iterator;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Single producer
  * Single consumer
  * Elements in queue are padded to prevent false sharing
- * Volatiles has been replaced with AtomicInteger (one of the updates is lazy)
  *
  * @author ydegtyarenko
  * @since 10/30/14
@@ -19,30 +17,28 @@ public class Queue3<T> extends AbstractQueue<T> {
 	public static final int CONTENDED_STEP = 32;
 
 	private final T[] data = (T[]) new Object[SIZE];
-	private final AtomicInteger incomeIndex = new AtomicInteger();
-	private final AtomicInteger outcomeIndex = new AtomicInteger();
+	private volatile int incomeIndex = 0;
+	private volatile int outcomeIndex = 0;
 
 	@Override
 	public boolean offer(T t) {
-		int currentIncome = incomeIndex.get();
-		int possibleNext = calculateNextIndex(currentIncome);
-		if (possibleNext == outcomeIndex.get()) {
+		int possibleNext = calculateNextIndex(incomeIndex);
+		if (possibleNext == outcomeIndex) {
 			return false;
 		} else {
-			data[currentIncome] = t;
-			incomeIndex.lazySet(possibleNext);
+			data[incomeIndex] = t;
+			incomeIndex = possibleNext;
 			return true;
 		}
 	}
 
 	@Override
 	public T poll() {
-		int currentIndex = outcomeIndex.get();
-		if (currentIndex == incomeIndex.get()) {
+		if (outcomeIndex == incomeIndex) {
 			return null;
 		} else {
-			T t = data[currentIndex];
-			outcomeIndex.set(calculateNextIndex(currentIndex));
+			T t = data[outcomeIndex];
+			outcomeIndex = calculateNextIndex(outcomeIndex);
 			return t;
 		}
 	}

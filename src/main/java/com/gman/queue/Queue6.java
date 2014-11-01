@@ -9,30 +9,34 @@ import java.util.concurrent.atomic.AtomicLong;
  * Single consumer
  * Elements in queue are padded to prevent false sharing
  * Volatiles has been replaced with AtomicLong (simplify overflow checks)
+ * Atomics are padded to prevent false sharing
  *
  * @author ydegtyarenko
  * @since 10/30/14
  */
-public class Queue5<T> extends AbstractQueue<T> {
+public class Queue6<T> extends AbstractQueue<T> {
 
 	public static final int SIZE = 2 << 20;
 	public static final int CONTENDED_STEP = 32;
 
 	private final T[] data = (T[]) new Object[SIZE];
 
-	private final AtomicLong incomeIndex = new AtomicLong();
-	private final AtomicLong outcomeIndex = new AtomicLong();
+	private final AtomicLong incomeIndex = new AtomicLong() {
+		public final long[] padding = new long[32];
+	};
+	private final AtomicLong outcomeIndex = new AtomicLong() {
+		public final long[] padding = new long[32];
+	};
 
 	@Override
 	public boolean offer(T t) {
 		long currentIncome = incomeIndex.get();
 		if (currentIncome - outcomeIndex.get() >= SIZE) {
 			return false;
-		} else {
-			data[calculateIndex(currentIncome)] = t;
-			incomeIndex.lazySet(currentIncome + CONTENDED_STEP);
-			return true;
 		}
+		data[calculateIndex(currentIncome)] = t;
+		incomeIndex.lazySet(currentIncome + CONTENDED_STEP);
+		return true;
 	}
 
 	@Override
@@ -40,11 +44,10 @@ public class Queue5<T> extends AbstractQueue<T> {
 		long currentOutcome = outcomeIndex.get();
 		if (currentOutcome >= incomeIndex.get()) {
 			return null;
-		} else {
-			T t = data[calculateIndex(currentOutcome)];
-			outcomeIndex.lazySet(currentOutcome + CONTENDED_STEP);
-			return t;
 		}
+		T t = data[calculateIndex(currentOutcome)];
+		outcomeIndex.lazySet(currentOutcome + CONTENDED_STEP);
+		return t;
 	}
 
 	@Override

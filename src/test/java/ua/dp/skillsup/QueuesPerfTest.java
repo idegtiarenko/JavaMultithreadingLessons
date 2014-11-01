@@ -1,7 +1,6 @@
 package ua.dp.skillsup;
 
 import com.gman.queue.*;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Queue;
@@ -12,56 +11,74 @@ import java.util.concurrent.*;
  * @since 10/26/14
  */
 public class QueuesPerfTest {
-	private static final int WARMUP = 500000;
 
+    private static final int TIMEOUT_IN_SECONDS = 45;
+
+	private static final int WARMUP = 500000;
 	private static final int REPETITIONS = 100000000;
 	private static final Integer TEST_VALUE = 42;
 	private final ExecutorService executorService = Executors.newSingleThreadExecutor();
 
 
-	@Test
+	@Test(timeout = TIMEOUT_IN_SECONDS *1000)
 	public void testArrayBlockingQueue() throws Exception {
 		Queue<Integer> queue = new ArrayBlockingQueue<Integer>(1000);
 		perfTest(queue);
 	}
 
-	@Test
+	@Test(timeout = TIMEOUT_IN_SECONDS *1000)
 	public void testConcurrentLinkedQueue() throws Exception {
 		Queue<Integer> queue = new ConcurrentLinkedQueue<Integer>();
 		perfTest(queue);
 	}
 
-	@Test
+	@Test(timeout = TIMEOUT_IN_SECONDS *1000)
 	public void testQueue1() throws Exception {
 		Queue<Integer> queue = new Queue1<>();
 		perfTest(queue);
 	}
 
-	@Test
-	public void testQueue2() throws Exception {
-		Queue<Integer> queue = new Queue2<>();
-		perfTest(queue);
-	}
+    @Test(timeout = TIMEOUT_IN_SECONDS *1000)
+    public void testQueue2() throws Exception {
+        Queue<Integer> queue = new Queue2<>();
+        perfTest(queue);
+    }
 
-	@Test
+	@Test(timeout = TIMEOUT_IN_SECONDS *1000)
 	public void testQueue3() throws Exception {
 		Queue<Integer> queue = new Queue3<>();
 		perfTest(queue);
 	}
 
-	@Test
-    @Ignore("Probably has some inconsistency")
+	@Test(timeout = TIMEOUT_IN_SECONDS *1000)
 	public void testQueue4() throws Exception {
 		Queue<Integer> queue = new Queue4<>();
 		perfTest(queue);
 	}
 
-	@Test
-    @Ignore("Probably has some inconsistency")
+	@Test(timeout = TIMEOUT_IN_SECONDS *1000)
 	public void testQueue5() throws Exception {
 		Queue<Integer> queue = new Queue5<>();
 		perfTest(queue);
 	}
+
+	@Test(timeout = TIMEOUT_IN_SECONDS *1000)
+	public void testQueue6() throws Exception {
+		Queue<Integer> queue = new Queue6<>();
+		perfTest(queue);
+	}
+
+    @Test(timeout = TIMEOUT_IN_SECONDS *1000)
+    public void testQueue7() throws Exception {
+        Queue<Integer> queue = new Queue7<>();
+        perfTest(queue);
+    }
+
+    @Test(timeout = TIMEOUT_IN_SECONDS *1000)
+    public void testQueue8() throws Exception {
+        Queue<Integer> queue = new Queue8<>();
+        perfTest(queue);
+    }
 
 	private void perfTest(Queue<Integer> queue) throws Exception {
 		performanceRun(0, queue);
