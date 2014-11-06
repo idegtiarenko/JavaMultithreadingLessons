@@ -12,72 +12,79 @@ import java.util.concurrent.*;
  */
 public class QueuesPerfAndCorrectnessTest {
 
-    private static final int TIMEOUT_IN_SECONDS = 45;
+	private static final int TIMEOUT_IN_SECONDS = 45;
 
 	private static final int WARMUP = 500000;
 	private static final int REPETITIONS = 100000000;
 	private final ExecutorService executorService = Executors.newSingleThreadExecutor();
 
 
-	@Test(timeout = TIMEOUT_IN_SECONDS *1000)
+	@Test(timeout = TIMEOUT_IN_SECONDS * 1000)
 	public void testArrayBlockingQueue() throws Exception {
 		Queue<Integer> queue = new ArrayBlockingQueue<Integer>(1000);
 		perfTest(queue);
 	}
 
-	@Test(timeout = TIMEOUT_IN_SECONDS *1000)
+	@Test(timeout = TIMEOUT_IN_SECONDS * 1000)
 	public void testConcurrentLinkedQueue() throws Exception {
 		Queue<Integer> queue = new ConcurrentLinkedQueue<Integer>();
 		perfTest(queue);
 	}
 
-	@Test(timeout = TIMEOUT_IN_SECONDS *1000)
+	@Test(timeout = TIMEOUT_IN_SECONDS * 1000)
 	public void testQueue1() throws Exception {
 		Queue<Integer> queue = new Queue1<>();
 		perfTest(queue);
 	}
 
-    @Test(timeout = TIMEOUT_IN_SECONDS *1000)
-    public void testQueue2() throws Exception {
-        Queue<Integer> queue = new Queue2<>();
-        perfTest(queue);
-    }
+	@Test(timeout = TIMEOUT_IN_SECONDS * 1000)
+	public void testQueue2() throws Exception {
+		Queue<Integer> queue = new Queue2<>();
+		perfTest(queue);
+	}
 
-	@Test(timeout = TIMEOUT_IN_SECONDS *1000)
+	@Test(timeout = TIMEOUT_IN_SECONDS * 1000)
 	public void testQueue3() throws Exception {
 		Queue<Integer> queue = new Queue3<>();
 		perfTest(queue);
 	}
 
-	@Test(timeout = TIMEOUT_IN_SECONDS *1000)
+	@Test(timeout = TIMEOUT_IN_SECONDS * 1000)
 	public void testQueue4() throws Exception {
 		Queue<Integer> queue = new Queue4<>();
 		perfTest(queue);
 	}
 
-	@Test(timeout = TIMEOUT_IN_SECONDS *1000)
+	@Test(timeout = TIMEOUT_IN_SECONDS * 1000)
 	public void testQueue5() throws Exception {
 		Queue<Integer> queue = new Queue5<>();
 		perfTest(queue);
 	}
 
-	@Test(timeout = TIMEOUT_IN_SECONDS *1000)
+	@Test(timeout = TIMEOUT_IN_SECONDS * 1000)
 	public void testQueue6() throws Exception {
 		Queue<Integer> queue = new Queue6<>();
 		perfTest(queue);
 	}
 
-    @Test(timeout = TIMEOUT_IN_SECONDS *1000)
-    public void testQueue7() throws Exception {
-        Queue<Integer> queue = new Queue7<>();
-        perfTest(queue);
-    }
+	@Test(timeout = TIMEOUT_IN_SECONDS * 1000)
+	public void testQueue7() throws Exception {
+		Queue<Integer> queue = new Queue7<>();
+		perfTest(queue);
+	}
 
-    @Test(timeout = TIMEOUT_IN_SECONDS *1000)
-    public void testQueue8() throws Exception {
-        Queue<Integer> queue = new Queue8<>();
-        perfTest(queue);
-    }
+	@Test(timeout = TIMEOUT_IN_SECONDS * 1000)
+	public void testQueue8() throws Exception {
+		Queue<Integer> queue = new Queue8<>();
+		perfTest(queue);
+	}
+
+	@Test(timeout = TIMEOUT_IN_SECONDS * 1000)
+	public void testQueue9() throws Exception {
+		Queue<Integer> queue = new Queue9<>();
+		perfTest(queue);
+	}
+
 
 	private void perfTest(Queue<Integer> queue) throws Exception {
 		performanceRun(true, queue);
@@ -90,21 +97,21 @@ public class QueuesPerfAndCorrectnessTest {
 
 
 	private long performanceRun(boolean isWarmUp, final Queue<Integer> queue) throws Exception {
-        Future<Void> producer = executorService.submit(new Producer(queue, isWarmUp));
-        int i = isWarmUp ? WARMUP : REPETITIONS;
-        final long start = isWarmUp ? 0 : System.nanoTime();
+		Future<Void> producer = executorService.submit(new Producer(queue, isWarmUp));
+		int i = isWarmUp ? WARMUP : REPETITIONS;
+		final long start = isWarmUp ? 0 : System.nanoTime();
 
-        do {
-            Integer val;
-            while ((val = queue.poll()) == null);
-            Assert.assertEquals(val.intValue(), i);
-        } while (0 != --i);
+		do {
+			Integer val;
+			while ((val = queue.poll()) == null) ;
+			Assert.assertEquals(val.intValue(), i);
+		} while (0 != --i);
 
-        producer.get();
+		producer.get();
 
-        final long end = isWarmUp ? 0 : System.nanoTime();
+		final long end = isWarmUp ? 0 : System.nanoTime();
 
-        return end-start;
+		return end - start;
 	}
 
 
@@ -121,7 +128,7 @@ public class QueuesPerfAndCorrectnessTest {
 		public Void call() throws Exception {
 			int i = isWarmUp ? WARMUP : REPETITIONS;
 			do {
-				while (!queue.offer(i));
+				while (!queue.offer(i)) ;
 			} while (0 != --i);
 
 			return null;
