@@ -4,7 +4,6 @@ import ua.dp.skillsup.counter.Counter;
 
 import java.util.Collection;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Works fine in thread pools
@@ -41,12 +40,5 @@ public class Counter1 implements Counter {
 	private static final class CounterHolder {
 
 		private long count = 0;
-	}
-
-	private static AtomicInteger nextHashCode = new AtomicInteger();
-	private static final int HASH_INCREMENT = 0x61c88647;
-
-	private static int nextHashCode() {
-		return nextHashCode.getAndAdd(HASH_INCREMENT);
 	}
 }

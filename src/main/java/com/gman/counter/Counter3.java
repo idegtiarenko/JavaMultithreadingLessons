@@ -12,7 +12,7 @@ import java.util.concurrent.atomic.AtomicLong;
  */
 public class Counter3 implements Counter {
 
-	private static final int TRIES = 5;
+	private static final int TRIES = 3;
 
 	private volatile AtomicLong[] counters = new AtomicLong[8];
 	private final AtomicBoolean isAnyOneUpdatingArray = new AtomicBoolean(false);
@@ -23,6 +23,12 @@ public class Counter3 implements Counter {
 			return nextHashCode();//Object#hashCode() does not give guarantee to be well distributed
 		}
 	};
+
+	public Counter3() {
+		for (int i = 0; i < counters.length; i++) {
+			counters[i] = new AtomicLong();
+		}
+	}
 
 	@Override
 	public void inc() {
