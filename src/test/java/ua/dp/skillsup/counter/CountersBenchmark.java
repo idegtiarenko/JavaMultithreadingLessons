@@ -1,4 +1,4 @@
-package ua.dp.skillsup;
+package ua.dp.skillsup.counter;
 
 
 import org.openjdk.jmh.annotations.*;

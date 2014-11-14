@@ -1,4 +1,4 @@
-package ua.dp.skillsup;
+package ua.dp.skillsup.queue;
 
 import com.gman.queue.*;
 import org.junit.Test;
