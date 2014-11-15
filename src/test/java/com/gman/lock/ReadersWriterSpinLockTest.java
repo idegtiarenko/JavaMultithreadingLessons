@@ -36,7 +36,7 @@ public class ReadersWriterSpinLockTest {
 		}
 
 		state.latch.countDown();
-		Thread.sleep(5 * 1000);
+		Thread.sleep(60 * 1000);
 
 		state.stop = true;
 
@@ -131,8 +131,8 @@ public class ReadersWriterSpinLockTest {
 
 						consumeCPU(1000);
 
-						Assert.assertEquals(state.readersCounter.get(), rCounter);
-						Assert.assertEquals(state.writersCounter.get(), wCounter);
+						Assert.assertEquals(rCounter, state.readersCounter.get());
+						Assert.assertEquals(wCounter, state.writersCounter.get());
 
 						state.writersCounter.decrementAndGet();
 					} finally {

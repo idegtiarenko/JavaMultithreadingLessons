@@ -3,6 +3,8 @@ package com.gman.lock;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
+ * There are about 2 reads on each write
+ *
  * @author gman
  */
 public class SimpleReadWriteLock1 implements ReadWriteLock {

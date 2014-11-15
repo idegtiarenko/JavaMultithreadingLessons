@@ -4,6 +4,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
+ * There are almost 1M reads on each write :(
+ *
  * @author gman
  */
 public class SimpleReadWriteLock2 implements ReadWriteLock {
@@ -15,8 +17,8 @@ public class SimpleReadWriteLock2 implements ReadWriteLock {
 
 	@Override
 	public void acquireReadLock() {
-		opsCount.incrementAndGet();
 		readers.incrementAndGet();
+		opsCount.incrementAndGet();
 		while (writer.get() > 0);
 	}
 
@@ -33,7 +35,7 @@ public class SimpleReadWriteLock2 implements ReadWriteLock {
 			ops = opsCount.get();
 
 			while (readers.get() > 0);
-			while (writer.compareAndSet(0, 1));
+			while (!writer.compareAndSet(0, 1));
 
 			if (opsCount.compareAndSet(ops, ops+1)) {
 				break;
