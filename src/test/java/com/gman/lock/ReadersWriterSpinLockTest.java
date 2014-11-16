@@ -11,6 +11,11 @@ import java.util.concurrent.atomic.AtomicLong;
 public class ReadersWriterSpinLockTest {
 
 	@Test
+	public void testJdkReadWriteLockAdapter() throws Exception {
+		runPerformanceTest(new JdkReadWriteLockAdapter());
+	}
+
+	@Test
 	public void testSimpleReadWriteLock1() throws Exception {
 		runPerformanceTest(new SimpleReadWriteLock1());
 	}
