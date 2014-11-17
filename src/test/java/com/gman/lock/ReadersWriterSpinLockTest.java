@@ -25,6 +25,11 @@ public class ReadersWriterSpinLockTest {
 		runPerformanceTest(new SimpleReadWriteLock2());
 	}
 
+	@Test
+	public void testSimpleReadWriteLock3() throws Exception {
+		runPerformanceTest(new SimpleReadWriteLock3());
+	}
+
 	private void runPerformanceTest(ReadWriteLock lock) throws Exception {
 
 		TestState state = new TestState(lock);

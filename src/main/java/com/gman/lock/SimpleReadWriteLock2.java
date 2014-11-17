@@ -13,13 +13,13 @@ public class SimpleReadWriteLock2 implements ReadWriteLock {
 	private final AtomicLong opsCount = new AtomicLong();
 
 	private final AtomicInteger readers = new AtomicInteger();
-	private final AtomicInteger writer = new AtomicInteger();
+	private final AtomicInteger writers = new AtomicInteger();
 
 	@Override
 	public void acquireReadLock() {
 		readers.incrementAndGet();
 		opsCount.incrementAndGet();
-		while (writer.get() > 0);
+		while (writers.get() > 0);
 	}
 
 	@Override
@@ -35,18 +35,18 @@ public class SimpleReadWriteLock2 implements ReadWriteLock {
 			ops = opsCount.get();
 
 			while (readers.get() > 0);
-			while (!writer.compareAndSet(0, 1));
+			while (!writers.compareAndSet(0, 1));
 
 			if (opsCount.compareAndSet(ops, ops+1)) {
 				break;
 			} else {
-				writer.set(0);
+				writers.set(0);
 			}
 		}
 	}
 
 	@Override
 	public void releaseWriteLock() {
-		writer.set(0);
+		writers.set(0);
 	}
 }

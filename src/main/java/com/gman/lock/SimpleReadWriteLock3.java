@@ -3,22 +3,24 @@ package com.gman.lock;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * There are about 2 reads on each write
  *
  * @author gman
  */
-public class SimpleReadWriteLock1 implements ReadWriteLock {
-
+public class SimpleReadWriteLock3 implements ReadWriteLock {
 
 	private final AtomicInteger readers = new AtomicInteger();
 	private final AtomicInteger writers = new AtomicInteger();
 
-	//blocking acquire read lock
 	@Override
 	public void acquireReadLock() {
-		while (!writers.compareAndSet(0, 1));
-		readers.incrementAndGet();
-		writers.set(0);
+		while (true) {
+			readers.incrementAndGet();
+			if (writers.get() > 0) {
+				readers.decrementAndGet();
+			} else {
+				break;
+			}
+		}
 	}
 
 	@Override
@@ -36,5 +38,4 @@ public class SimpleReadWriteLock1 implements ReadWriteLock {
 	public void releaseWriteLock() {
 		writers.set(0);
 	}
-
 }
