@@ -1,7 +1,7 @@
 package ua.dp.skillsup.lock;
 
 import com.gman.lock.ReadWriteLock;
-import com.gman.lock.SimpleReadWriteLock3;
+import com.gman.lock.SimpleReadWriteLock4;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -19,7 +19,7 @@ public class ReadersWriterSpinLockTest {
 	private final AtomicLong readersCounter = new AtomicLong();
 	private final AtomicLong writersCounter = new AtomicLong();
 
-	private final ReadWriteLock spinLock = new SimpleReadWriteLock3();
+	private final ReadWriteLock spinLock = new SimpleReadWriteLock4();
 
 	private volatile boolean stop = false;
 
