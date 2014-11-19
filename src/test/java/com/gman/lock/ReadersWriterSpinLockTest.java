@@ -35,11 +35,21 @@ public class ReadersWriterSpinLockTest {
 		runPerformanceTest(new SimpleReadWriteLock4());
 	}
 
+	@Test
+	public void testSimpleReadWriteLock5() throws Exception {
+		runPerformanceTest(new SimpleReadWriteLock5());
+	}
+
+	@Test
+	public void testSimpleReadWriteLock6() throws Exception {
+		runPerformanceTest(new SimpleReadWriteLock6());
+	}
+
 	private void runPerformanceTest(ReadWriteLock lock) throws Exception {
 
 		TestState state = new TestState(lock);
 		ExecutorService executorService = Executors.newCachedThreadPool();
-		List<Future> futures = new ArrayList<Future>();
+		List<Future> futures = new ArrayList<>();
 		int threads = 8;
 
 		for (int i = 0; i < threads; i++) {
