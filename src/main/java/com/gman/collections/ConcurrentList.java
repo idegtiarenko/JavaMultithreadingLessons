@@ -28,7 +28,7 @@ public class ConcurrentList<T> extends AbstractList<T> {
 		int minor = calculateMinorIndex(index);
 		while (
 				data.get(major) == null &&
-				data.compareAndSet(major, null, new AtomicReferenceArray<T>(sizeOfMinorArray(index)))
+				!data.compareAndSet(major, null, new AtomicReferenceArray<T>(sizeOfMinorArray(index)))
 		);
 		data.get(major).set(minor, t);
 		size.incrementAndGet();
